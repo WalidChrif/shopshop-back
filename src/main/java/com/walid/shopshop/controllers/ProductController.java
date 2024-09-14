@@ -1,5 +1,6 @@
 package com.walid.shopshop.controllers;
 
+import com.walid.shopshop.entities.Category;
 import com.walid.shopshop.entities.Product;
 import com.walid.shopshop.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,11 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @GetMapping("/categories")
+    public List<Category> findAllProductsCategories(){
+        return productService.findAllCategories();
+    }
 
     @GetMapping("/category/{id}")
     public Page<Product> findProductByCategory(

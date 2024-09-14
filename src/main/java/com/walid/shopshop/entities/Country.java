@@ -5,18 +5,19 @@ import lombok.Data;
 
 import java.util.List;
 
-
 @Data
 @Entity
-@Table
-public class Category {
+public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String code;
+
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "category")
-    private List<Product> products;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "country")
+    private List<State> states;
+
 }

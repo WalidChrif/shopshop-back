@@ -1,6 +1,8 @@
 package com.walid.shopshop.services;
 
+import com.walid.shopshop.entities.Category;
 import com.walid.shopshop.entities.Product;
+import com.walid.shopshop.repos.CategoryRepo;
 import com.walid.shopshop.repos.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,10 +16,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductRepo productRepo;
+    @Autowired
+    CategoryRepo categoryRepo;
 
     @Override
     public Page<Product> findProductsByName(String name, Pageable pageable) {
         return productRepo.findProductsByNameContaining(name, pageable);
+    }
+
+    @Override
+    public List<Category> findAllCategories() {
+        return categoryRepo.findAll();
     }
 
     @Override
