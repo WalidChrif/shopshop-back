@@ -8,7 +8,7 @@ import java.util.List;
 public interface StateService {
 
     List<Country> getAllCountries();
-    List<State> findByCountryId(Long id);
+    List<State> findByCountryName(String name);
 
 
 }

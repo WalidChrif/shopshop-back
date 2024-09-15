@@ -21,8 +21,8 @@ public class StateController {
     public List<Country> getCountries(){
         return stateService.getAllCountries();
     }
-    @GetMapping("/country/{id}")
-    public List<State> getStates(@PathVariable Long id){
-        return stateService.findByCountryId(id);
+    @GetMapping("/country/{name}")
+    public List<State> getStates(@PathVariable String name){
+        return stateService.findByCountryName(name);
     }
 }

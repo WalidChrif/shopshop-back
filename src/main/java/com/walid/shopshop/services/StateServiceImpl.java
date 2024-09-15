@@ -23,7 +23,7 @@ public class StateServiceImpl implements StateService {
     }
 
     @Override
-    public List<State> findByCountryId(Long id) {
-        return stateRepo.findByCountryId(id);
+    public List<State> findByCountryName(String name) {
+        return stateRepo.findByCountryName(name);
     }
 }
