@@ -6,6 +6,7 @@ import com.walid.shopshop.entities.Customer;
 import com.walid.shopshop.entities.Order;
 import com.walid.shopshop.entities.OrderItem;
 import com.walid.shopshop.repos.CustomerRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class CustomerServiceImpl implements CustomerService{
     CustomerRepo customerRepo;
 
 
+    @Transactional
     @Override
     public PurchaseResponse placeOrder(Purchase purchase) {
         Order order = purchase.getOrder();
@@ -32,6 +34,10 @@ public class CustomerServiceImpl implements CustomerService{
             order.addOrderItem(orderItem);
         });
         Customer customer = purchase.getCustomer();
+        Customer customerByEmail = customerRepo.findByEmail(customer.getEmail());
+        if (customerByEmail != null){
+            customer = customerByEmail;
+        }
         order.setCustomer(customer);
         customer.addOrder(order);
         customerRepo.save(customer);
