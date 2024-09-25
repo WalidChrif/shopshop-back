@@ -1,5 +1,6 @@
 package com.walid.shopshop.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class Address {
     private String street;
     private String zipcode;
 
+    @JsonIgnore
     @OneToOne
     @PrimaryKeyJoinColumn
     private Order order;

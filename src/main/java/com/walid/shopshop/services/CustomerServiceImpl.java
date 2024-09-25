@@ -24,8 +24,10 @@ public class CustomerServiceImpl implements CustomerService{
     @Transactional
     @Override
     public PurchaseResponse placeOrder(Purchase purchase) {
-        Order order = purchase.getOrder();
+        Order order = new Order();
         order.setTrackingNumber(generateTrackingNumber());
+        order.setTotalPrice(purchase.getTotalPrice());
+        order.setTotalItems(purchase.getTotalItems());
         order.setShippingAddress(purchase.getShippingAddress());
         order.setBillingAddress(purchase.getBillingAddress());
         List<OrderItem> orderItems = purchase.getOrderItems();

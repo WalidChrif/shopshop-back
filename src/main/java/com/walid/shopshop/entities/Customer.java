@@ -19,6 +19,7 @@ public class Customer {
     @Column(unique = true)
     private String email;
 
+
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
