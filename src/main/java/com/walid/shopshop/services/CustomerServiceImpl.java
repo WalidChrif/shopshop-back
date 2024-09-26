@@ -28,6 +28,7 @@ public class CustomerServiceImpl implements CustomerService{
         order.setTrackingNumber(generateTrackingNumber());
         order.setTotalPrice(purchase.getTotalPrice());
         order.setTotalItems(purchase.getTotalItems());
+        order.setShippingCost(purchase.getShippingCost());
         order.setShippingAddress(purchase.getShippingAddress());
         order.setBillingAddress(purchase.getBillingAddress());
         List<OrderItem> orderItems = purchase.getOrderItems();

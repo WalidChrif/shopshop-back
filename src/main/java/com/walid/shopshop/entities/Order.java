@@ -22,6 +22,7 @@ public class Order {
     private String trackingNumber;
     private BigDecimal totalPrice;
     private int totalItems;
+    private BigDecimal shippingCost;
     private String status;
 
     @CreationTimestamp

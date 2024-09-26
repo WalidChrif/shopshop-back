@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("https://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/orders")
 public class OrderController {
@@ -18,6 +18,10 @@ public class OrderController {
     @GetMapping
     public List<Order> getOrdersByCustomerEmail(@RequestParam String email) {
         return orderService.findOrdersByCustomerEmail(email);
+    }
+    @GetMapping("/{trackingNumber}")
+    public Order getOrdersByTrackingNumber(@PathVariable String trackingNumber) {
+        return orderService.findOrderByTrackingNumber(trackingNumber);
     }
 
 

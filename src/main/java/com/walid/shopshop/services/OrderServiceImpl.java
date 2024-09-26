@@ -15,6 +15,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findOrdersByCustomerEmail(String email) {
-        return orderRepo.findByCustomerEmail(email);
+        return orderRepo.findByCustomerEmailOrderByDateCreatedDesc(email);
+    }
+
+    @Override
+    public Order findOrderByTrackingNumber(String trackingNumber) {
+        return orderRepo.findByTrackingNumber(trackingNumber);
     }
 }

@@ -15,6 +15,7 @@ public class Purchase {
     private Customer customer;
     private BigDecimal totalPrice;
     private int totalItems;
+    private BigDecimal shippingCost;
     private Address shippingAddress;
     private Address billingAddress;
     private List<OrderItem> orderItems;
