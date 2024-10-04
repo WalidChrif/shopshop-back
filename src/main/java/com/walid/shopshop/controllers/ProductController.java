@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin("https://localhost:4200")
+@CrossOrigin(origins = {"https://localhost:4200", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
@@ -20,6 +20,10 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @GetMapping("/best-seller")
+    public Product bestSeller() {
+        return productService.bestSeller();
+    }
     @GetMapping("/categories")
     public List<Category> findAllProductsCategories(){
         return productService.findAllCategories();
@@ -51,8 +55,17 @@ public class ProductController {
         return productService.findProductBySku(sku);
     }
 
+    @GetMapping("/all")
+    public Page<Product> findAllProducts(
+            @RequestParam(defaultValue = "0") int page
+            , @RequestParam(defaultValue = "10") int size
+            , @RequestParam(defaultValue = "dateCreated") String orderBy) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy).descending());
+        return productService.findAllProducts(pageable);
+    }
+
     @GetMapping()
-    public List<Product> findOneProductPerCategory(){
+    public List<Product> findOnePerCategory() {
         return productService.findOneProductPerCategory();
     }
 

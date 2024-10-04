@@ -20,8 +20,21 @@ public class ProductServiceImpl implements ProductService {
     CategoryRepo categoryRepo;
 
     @Override
+    public Product bestSeller() {
+        if (productRepo.findAllByOrderByUnitsInStockDesc().isEmpty()) {
+            return null;
+        }
+        return productRepo.findAllByOrderByUnitsInStockDesc().get(0);
+    }
+
+    @Override
     public Page<Product> findProductsByName(String name, Pageable pageable) {
         return productRepo.findProductsByNameContaining(name, pageable);
+    }
+
+    @Override
+    public Page<Product> findAllProducts(Pageable pageable) {
+        return productRepo.findAll(pageable);
     }
 
     @Override
@@ -42,6 +55,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findOneProductPerCategory() {
         return productRepo.findOneProductPerCategory();
+    }
+
+    @Override
+    public void reduceStock(String sku, int quantity) {
+        Product product = productRepo.findBySku(sku).orElseThrow();
+        product.setUnitsInStock(product.getUnitsInStock() - quantity);
+        productRepo.save(product);
+    }
+
+    @Override
+    public void addSales(String sku, int quantity) {
+        Product product = productRepo.findBySku(sku).orElseThrow();
+        product.setSales(product.getSales() + quantity);
     }
 
 

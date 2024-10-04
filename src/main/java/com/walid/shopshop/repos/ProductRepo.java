@@ -13,6 +13,9 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Long> {
+
+    List<Product> findAllByOrderByUnitsInStockDesc();
+
     Optional<Product> findBySku(String sku);
 
     Page<Product> findByCategoryId(Long id, Pageable pageable);

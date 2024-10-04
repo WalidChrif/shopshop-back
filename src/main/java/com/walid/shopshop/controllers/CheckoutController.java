@@ -6,7 +6,7 @@ import com.walid.shopshop.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("https://localhost:4200")
+@CrossOrigin(origins = {"https://localhost:4200", "http://localhost:4200"})
 @RestController
 @RequestMapping("/api/v1/checkout")
 public class CheckoutController {

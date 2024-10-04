@@ -29,11 +29,11 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(auth ->
+                        auth.anyRequest().permitAll())
                 .oauth2ResourceServer(oauth -> oauth.jwt(token -> token.jwtAuthenticationConverter(jwtAuthenticationConverterForKeycloak())))
 //                can be omitted since Spring Security will automatically detect when using JWT or OAuth2 and handle statelessness by default.
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.anyRequest().permitAll())
                 .build();
     }
 

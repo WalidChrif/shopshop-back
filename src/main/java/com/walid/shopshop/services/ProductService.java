@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface ProductService {
 
+    Page<Product> findAllProducts(Pageable pageable);
+
     List<Category> findAllCategories();
 
     Product findProductBySku(String sku);
@@ -19,4 +21,10 @@ public interface ProductService {
     Page<Product> findProductsByName(String name, Pageable pageable);
 
     List<Product> findOneProductPerCategory();
+
+    Product bestSeller();
+
+    void reduceStock(String sku, int quantity);
+
+    void addSales(String sku, int quantity);
 }

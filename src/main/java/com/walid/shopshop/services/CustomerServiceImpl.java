@@ -8,6 +8,8 @@ import com.walid.shopshop.entities.OrderItem;
 import com.walid.shopshop.repos.CustomerRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,8 @@ public class CustomerServiceImpl implements CustomerService{
     @Autowired
     CustomerRepo customerRepo;
 
+    @Autowired
+    ProductService productService;
 
     @Transactional
     @Override
@@ -33,6 +37,9 @@ public class CustomerServiceImpl implements CustomerService{
         order.setBillingAddress(purchase.getBillingAddress());
         List<OrderItem> orderItems = purchase.getOrderItems();
         orderItems.forEach(orderItem -> {
+            productService.reduceStock(orderItem.getSku(), orderItem.getQuantity());
+            productService.addSales(orderItem.getSku(), orderItem.getQuantity());
+            orderItem.setQuantity(orderItem.getQuantity());
             orderItem.setOrder(order);
             order.addOrderItem(orderItem);
         });
@@ -51,5 +58,8 @@ public class CustomerServiceImpl implements CustomerService{
        return UUID.randomUUID().toString();
     }
 
-
+    @Override
+    public Page<Customer> getAllCustomers(Pageable pageable) {
+        return customerRepo.findAll(pageable);
+    }
 }

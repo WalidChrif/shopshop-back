@@ -3,6 +3,8 @@ package com.walid.shopshop.services;
 import com.walid.shopshop.entities.Order;
 import com.walid.shopshop.repos.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepo orderRepo;
+
+    @Override
+    public Page<Order> findAllOrders(Pageable pageable) {
+        return orderRepo.findAll(pageable);
+    }
 
     @Override
     public List<Order> findOrdersByCustomerEmail(String email) {
