@@ -14,7 +14,9 @@ import java.util.Optional;
 @Repository
 public interface ProductRepo extends JpaRepository<Product, Long> {
 
-    List<Product> findAllByOrderByUnitsInStockDesc();
+    Product findTopByOrderBySalesDesc();
+
+    List<Product> findTop5ByOrderBySalesDesc();
 
     Optional<Product> findBySku(String sku);
 
@@ -26,4 +28,6 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
             "JOIN (SELECT MIN(id) as id, category_id FROM product GROUP BY category_id) grouped " +
             "ON p.id = grouped.id", nativeQuery = true)
     List<Product> findOneProductPerCategory();
+
+    List<Product> findTop5ByOrderByDateCreatedDesc();
 }

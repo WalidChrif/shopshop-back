@@ -35,11 +35,17 @@ public class SalesServiceImpl implements SalesService{
 
     @Override
     public BigDecimal getMonthlyEarnings() {
+        if (orderRepo.findTotalEarnings() == null) {
+            return BigDecimal.ZERO;
+        }
         return orderRepo.findTotalEarnings().divide(BigDecimal.valueOf(12), RoundingMode.CEILING);
     }
 
     @Override
     public BigDecimal getWeeklyEarnings() {
+        if (orderRepo.findTotalEarnings() == null) {
+            return BigDecimal.ZERO;
+        }
         return orderRepo.findTotalEarnings().divide(BigDecimal.valueOf(52), RoundingMode.CEILING);
     }
 }

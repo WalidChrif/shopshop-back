@@ -4,11 +4,14 @@ import com.walid.shopshop.entities.Category;
 import com.walid.shopshop.entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 
 public interface ProductService {
+
+    List<Product> findPopularProducts();
 
     Page<Product> findAllProducts(Pageable pageable);
 
@@ -27,4 +30,9 @@ public interface ProductService {
     void reduceStock(String sku, int quantity);
 
     void addSales(String sku, int quantity);
+
+    Product addProduct(MultipartFile image, String name, String description, String unitPrice
+            , String unitsInStock, boolean active, Long categoryId);
+
+    List<Product> findRecentProducts();
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,12 +21,24 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    @PostMapping("/add-product")
+    public Product addProduct(@RequestParam MultipartFile image, @RequestParam String name, @RequestParam String description
+            , @RequestParam String unitPrice, @RequestParam String unitsInStock, @RequestParam boolean active
+            , @RequestParam Long categoryId) {
+        return productService.addProduct(image, name, description, unitPrice, unitsInStock, active, categoryId);
+    }
+    @GetMapping("/popular")
+    public List<Product> findPopularProducts() {
+        return productService.findPopularProducts();
+    }
+
     @GetMapping("/best-seller")
     public Product bestSeller() {
         return productService.bestSeller();
     }
+
     @GetMapping("/categories")
-    public List<Category> findAllProductsCategories(){
+    public List<Category> findAllProductsCategories() {
         return productService.findAllCategories();
     }
 
@@ -67,6 +80,10 @@ public class ProductController {
     @GetMapping()
     public List<Product> findOnePerCategory() {
         return productService.findOneProductPerCategory();
+    }
+    @GetMapping("/recent")
+    public List<Product> findRecentProducts() {
+        return productService.findRecentProducts();
     }
 
 }

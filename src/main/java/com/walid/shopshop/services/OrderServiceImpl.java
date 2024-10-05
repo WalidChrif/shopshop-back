@@ -29,4 +29,9 @@ public class OrderServiceImpl implements OrderService {
     public Order findOrderByTrackingNumber(String trackingNumber) {
         return orderRepo.findByTrackingNumber(trackingNumber);
     }
+
+    @Override
+    public List<Order> findRecentOrders() {
+        return orderRepo.findTop5ByOrderByDateCreatedDesc();
+    }
 }

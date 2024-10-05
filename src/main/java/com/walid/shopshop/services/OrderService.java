@@ -11,4 +11,6 @@ public interface OrderService {
     Page<Order> findAllOrders(Pageable pageable);
     List<Order> findOrdersByCustomerEmail(String email);
     Order findOrderByTrackingNumber(String trackingNumber);
+
+    List<Order> findRecentOrders();
 }

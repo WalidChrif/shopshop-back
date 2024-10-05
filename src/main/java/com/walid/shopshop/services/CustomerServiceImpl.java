@@ -62,4 +62,9 @@ public class CustomerServiceImpl implements CustomerService{
     public Page<Customer> getAllCustomers(Pageable pageable) {
         return customerRepo.findAll(pageable);
     }
+
+    @Override
+    public List<Customer> getRecentCustomers() {
+        return customerRepo.findTop5ByOrderByDateCreatedDesc();
+    }
 }

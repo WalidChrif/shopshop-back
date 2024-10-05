@@ -35,5 +35,10 @@ public class OrderController {
         return orderService.findAllOrders(pageable);
     }
 
+    @GetMapping("/recent")
+    public List<Order> getRecentOrders() {
+        return orderService.findRecentOrders();
+    }
+
 
 }

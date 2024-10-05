@@ -23,7 +23,8 @@ public class Product {
     private String name;
     private String description;
     private BigDecimal unitPrice;
-    private int sales;
+    @Column(columnDefinition = "int default 0")
+    private int sales = 0;
     private String imageUrl;
     private boolean active;
     private int unitsInStock;

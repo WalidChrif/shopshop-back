@@ -15,4 +15,6 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
 
     @Query("SELECT SUM(oi.unitPrice * oi.quantity) FROM OrderItem oi")
     BigDecimal findTotalEarnings();
+
+    List<Order> findTop5ByOrderByDateCreatedDesc();
 }
