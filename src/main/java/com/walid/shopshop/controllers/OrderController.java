@@ -30,8 +30,11 @@ public class OrderController {
 
     @GetMapping("/all")
     public Page<Order> getAllOrders(@RequestParam int page, @RequestParam int size
-            , @RequestParam(defaultValue = "dateCreated") String orderBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("dateCreated").descending());
+            , @RequestParam(defaultValue = "dateCreated,desc") String orderBy
+    ) {
+        String[] sortParams = orderBy.split(",");
+        Sort sorting = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
+        Pageable pageable = PageRequest.of(page, size, sorting);
         return orderService.findAllOrders(pageable);
     }
 

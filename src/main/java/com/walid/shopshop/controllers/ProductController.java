@@ -47,9 +47,11 @@ public class ProductController {
             @PathVariable Long id
             , @RequestParam(defaultValue = "0") int page
             , @RequestParam(defaultValue = "10") int size
-            , @RequestParam(defaultValue = "name") String orderBy
+            , @RequestParam(defaultValue = "name,asc") String orderBy
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy, "unitPrice").ascending());
+        String[] sortParams = orderBy.split(",");
+        Sort sorting = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
+        Pageable pageable = PageRequest.of(page, size, sorting);
         return productService.findByCategoryId(id, pageable);
     }
 
@@ -58,8 +60,11 @@ public class ProductController {
             @PathVariable String name
             , @RequestParam(defaultValue = "0") int page
             , @RequestParam(defaultValue = "10") int size
-            , @RequestParam(defaultValue = "name") String orderBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy).ascending());
+            , @RequestParam(defaultValue = "name,asc") String orderBy
+    ) {
+        String[] sortParams = orderBy.split(",");
+        Sort sorting = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
+        Pageable pageable = PageRequest.of(page, size, sorting);
         return productService.findProductsByName(name, pageable);
     }
 
@@ -72,8 +77,10 @@ public class ProductController {
     public Page<Product> findAllProducts(
             @RequestParam(defaultValue = "0") int page
             , @RequestParam(defaultValue = "10") int size
-            , @RequestParam(defaultValue = "dateCreated") String orderBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderBy).descending());
+            , @RequestParam(defaultValue = "dateCreated,desc") String orderBy) {
+        String[] sortParams = orderBy.split(",");
+        Sort sorting = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
+        Pageable pageable = PageRequest.of(page, size, sorting);
         return productService.findAllProducts(pageable);
     }
 
