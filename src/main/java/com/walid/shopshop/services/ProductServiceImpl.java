@@ -4,11 +4,11 @@ import com.walid.shopshop.entities.Category;
 import com.walid.shopshop.entities.Product;
 import com.walid.shopshop.repos.CategoryRepo;
 import com.walid.shopshop.repos.ProductRepo;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,12 +26,13 @@ public class ProductServiceImpl implements ProductService {
     CategoryRepo categoryRepo;
 
     private static final String ASSETS_DIR = "../shopshop-front/src/assets/images/products/";
-    private static final String ImageUrl = "/assets/images/products/";
+//    private static final String ImageUrl = "/assets/images/products/";
 
     @Override
     public Product bestSeller() {
         return productRepo.findTopByOrderBySalesDesc();
     }
+
     @Override
     public List<Product> findPopularProducts() {
         return productRepo.findTop5ByOrderBySalesDesc();
@@ -94,8 +95,9 @@ public class ProductServiceImpl implements ProductService {
                 throw new RuntimeException("Could not create directory");
             }
         }
-        String imageName = image.getOriginalFilename();
-        Path imagePath = categoryPath.resolve(sku.split("-")[0] + "-" + "shopshop" + sku.split("-")[1] + ".png");
+//        String imageName = image.getOriginalFilename();
+        String[] skuParts = sku.split("-");
+        Path imagePath = categoryPath.resolve(skuParts[0].toLowerCase() + "-shopshop-" + skuParts[1] + ".png");
         try {
             Files.copy(image.getInputStream(), imagePath);
         } catch (IOException e) {
@@ -110,7 +112,11 @@ public class ProductServiceImpl implements ProductService {
         product.setCategory(category);
         product.setSku(sku);
         String imagePathString = imagePath.toString();
-        product.setImageUrl(imagePathString.substring(imagePathString.indexOf("assets")).replaceAll("\\\\", "/"));
+//        product.setImageUrl(imagePathString.substring(imagePathString.indexOf("assets")).replaceAll("\\\\", "/"));
+        int assetsIndex = imagePathString.indexOf("assets");
+        String urlPath = imagePathString.substring(assetsIndex).replace("\\", "/");
+        product.setImageUrl(urlPath);
+
         return productRepo.save(product);
     }
 
@@ -119,8 +125,23 @@ public class ProductServiceImpl implements ProductService {
         return productRepo.findTop5ByOrderByDateCreatedDesc();
     }
 
+    @Override
+    public void deleteProduct(String sku) {
+        Product product = findProductBySku(sku);
+        Path imagePath = Path.of("..\\shopshop-front\\src\\" + product.getImageUrl());
+        System.out.println(imagePath);
+        if (!Files.exists(imagePath)) {
+            System.out.println("Image does not exist");
+        } else try {
+            Files.delete(imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not delete image");
+        }
+        productRepo.deleteById(product.getId());
+    }
+
     private String generateSku(String category) {
-        return category.toLowerCase().substring(0, category.length() - 1) + "-" + (int) ((Math.random() * 100) + 1000);
+        return category.toUpperCase().substring(0, category.length() - 1) + "-" + (int) ((Math.random() * 100) + 2000);
     }
 
 

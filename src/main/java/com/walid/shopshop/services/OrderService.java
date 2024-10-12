@@ -9,7 +9,7 @@ import java.util.List;
 public interface OrderService {
 
     Page<Order> findAllOrders(Pageable pageable);
-    List<Order> findOrdersByCustomerEmail(String email);
+    List<Order> findOrdersByCustomerEmail(String email, Pageable pageable);
     Order findOrderByTrackingNumber(String trackingNumber);
 
     List<Order> findRecentOrders();

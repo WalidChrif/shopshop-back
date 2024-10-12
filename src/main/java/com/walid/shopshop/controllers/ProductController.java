@@ -21,12 +21,18 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add-product")
     public Product addProduct(@RequestParam MultipartFile image, @RequestParam String name, @RequestParam String description
             , @RequestParam String unitPrice, @RequestParam String unitsInStock, @RequestParam boolean active
             , @RequestParam Long categoryId) {
         return productService.addProduct(image, name, description, unitPrice, unitsInStock, active, categoryId);
     }
+    @DeleteMapping("/delete/{sku}")
+    public void deleteProduct(@PathVariable String sku) {
+        productService.deleteProduct(sku);
+    }
+
     @GetMapping("/popular")
     public List<Product> findPopularProducts() {
         return productService.findPopularProducts();

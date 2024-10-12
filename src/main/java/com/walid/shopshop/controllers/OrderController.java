@@ -20,8 +20,11 @@ public class OrderController {
     private OrderService orderService;
 
     @GetMapping
-    public List<Order> getOrdersByCustomerEmail(@RequestParam String email) {
-        return orderService.findOrdersByCustomerEmail(email);
+    public List<Order> getOrdersByCustomerEmail(@RequestHeader String email, @RequestParam String orderBy) {
+        String[] sortParams = orderBy.split(",");
+        Sort sorting = Sort.by(Sort.Direction.fromString(sortParams[1]), sortParams[0]);
+        Pageable pageable = PageRequest.of(0,10,sorting);
+        return orderService.findOrdersByCustomerEmail(email, pageable);
     }
     @GetMapping("/{trackingNumber}")
     public Order getOrdersByTrackingNumber(@PathVariable String trackingNumber) {

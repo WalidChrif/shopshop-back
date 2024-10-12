@@ -21,8 +21,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findOrdersByCustomerEmail(String email) {
-        return orderRepo.findByCustomerEmailOrderByDateCreatedDesc(email);
+    public List<Order> findOrdersByCustomerEmail(String email, Pageable pageable) {
+        return orderRepo.findByCustomerEmail(email, pageable);
     }
 
     @Override

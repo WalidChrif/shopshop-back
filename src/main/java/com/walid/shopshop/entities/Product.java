@@ -19,14 +19,15 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String sku;
     private String name;
     private String description;
     private BigDecimal unitPrice;
     @Column(columnDefinition = "int default 0")
     private int sales = 0;
-    private String imageUrl;
     private boolean active;
+    private String imageUrl;
     private int unitsInStock;
     @CreationTimestamp
     private Date dateCreated;

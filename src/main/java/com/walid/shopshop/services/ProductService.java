@@ -35,4 +35,6 @@ public interface ProductService {
             , String unitsInStock, boolean active, Long categoryId);
 
     List<Product> findRecentProducts();
+
+    void deleteProduct(String sku);
 }
