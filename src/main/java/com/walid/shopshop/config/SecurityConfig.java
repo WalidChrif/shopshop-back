@@ -1,6 +1,11 @@
 package com.walid.shopshop.config;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -15,11 +20,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableWebSecurity
@@ -31,14 +32,14 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(auth ->
-                        auth
-//                                .requestMatchers("/api/v1/customers/**").hasRole("ADMIN")
-//                                .requestMatchers("/api/v1/sales/**").hasRole("ADMIN")
-//                                .requestMatchers("/orders/**").hasRole("CUSTOMER")
-                                .anyRequest().permitAll())
+                .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/v1/customers/**").hasRole("ADMIN")
+                .requestMatchers("/api/v1/sales/**").hasRole("ADMIN")
+                .requestMatchers("/api/v1/orders/{trackingNumber}").permitAll()
+                .requestMatchers("/api/v1/orders/**").hasAnyRole("CUSTOMER", "ADMIN")
+                .anyRequest().permitAll())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverterForKeycloak())))
-//                can be omitted since Spring Security will automatically detect when using JWT or OAuth2 and handle statelessness by default.
+                //                can be omitted since Spring Security will automatically detect when using JWT or OAuth2 and handle statelessness by default.
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
@@ -50,7 +51,13 @@ public class SecurityConfig {
             Map<String, Object> realmAccess = jwt.getClaim("realm_access");
             Collection<String> realmRoles = new ArrayList<>();
             if (realmAccess != null && realmAccess.containsKey("roles")) {
-                realmRoles = (Collection<String>) realmAccess.get("roles");
+                Object rolesObj = realmAccess.get("roles");
+                if (rolesObj instanceof Collection<?> roles) {
+                    realmRoles = roles.stream()
+                        .filter(String.class::isInstance)
+                        .map(String.class::cast)
+                        .collect(Collectors.toList());
+                }
             }
             // Extract client roles
             Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
@@ -75,4 +82,3 @@ public class SecurityConfig {
     }
 
 }
-
